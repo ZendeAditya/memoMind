@@ -1,3 +1,13 @@
+import FeatureSection from "@/components/landing/Features";
+import Hero from "@/components/landing/Hero";
+import Work from "@/components/landing/Work";
+
 export default function Home() {
-  return <h2>welcome to memoMind page!</h2>;
+  return (
+    <>
+      <Hero />
+      <FeatureSection />
+      <Work/>
+    </>
+  );
 }
