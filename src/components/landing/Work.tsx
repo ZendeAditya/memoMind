@@ -13,8 +13,7 @@ const Work = (_props: Props) => {
           src="https://www.youtube.com/embed/XDqEvmxnLeY?si=ERGgVpjYOVnqu5JU"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
+          referrerPolicy="strict-origin-when-cross-origin"
           className="lg:w-[50rem] w-96 h-96 rounded-lg shadow-lgls
           "
         ></iframe>
