@@ -1,22 +1,18 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import authImg from "../../../../assets/auth.jpg";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import SignIn from "@/components/SignIn";
 type Props = {};
 
 const SignInPage = (props: Props) => {
-  const router = useRouter();
   return (
     <div className="relative">
-      <div className="absolute top-0 p-2">
-        <Button onClick={() => router.push("/")}>Back</Button>
-      </div>
+      <div className="absolute top-0 p-2"></div>
       <section className="flex items-center justify-center min-h-screen lg:hidden">
         <div className="border-2 w-full mx-10 rounded-lg shadow-md h-32 text-center">
           <h2 className=" text-lg p-2">Welcome to MemoMind!</h2>
-          <Button className="w-80 h-10">Sign In With Google</Button>
+          <SignIn />
         </div>
       </section>
       <section className="hidden lg:block">
