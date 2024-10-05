@@ -102,8 +102,8 @@ const FeatureSection = () => {
                 alt={`Feature ${idx + 1}`}
                 width={500}
                 height={500}
-                className="rounded-lg shadow-lg"
-                objectFit="cover"
+                className="rounded-lg shadow-lg object-cover"
+                // objectFit="cover"
               />
             </motion.div>
           </motion.div>
