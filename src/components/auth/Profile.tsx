@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import Image from "next/image";
 export default async function UserAvatar() {
   const session = await auth();
-
+  console.log(session);
   if (!session?.user) return null;
   console.log("Name of the user is : ", session.user.name);
   return (

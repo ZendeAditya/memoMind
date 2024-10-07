@@ -1,36 +1,45 @@
 import { auth } from "@/auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-const protectedRoutes = ['/note'];
-const publicRoutes = ['/sign-in', '/'];
+export async function middleware(request: NextRequest) {
+    const path = request.nextUrl.pathname
 
-export const middleware = async (req: NextRequest) => {
-    try {
-        const session = await auth();
-        const { pathname } = req.nextUrl;
+    const isPublicPath = path === '/sign-in' || path === "/" || path.startsWith('/api/');
 
-        if (!pathname) {
-            return NextResponse.next();
+    const session = await auth()
+
+    if (path === '/') {
+        if (session) {
+            return NextResponse.redirect(new URL('/note', request.url))
+        } else {
+            return NextResponse.next()
         }
-
-        const isProtectedRoute = protectedRoutes.includes(pathname);
-        const isPublicRoute = publicRoutes.includes(pathname);
-
-        if (isProtectedRoute && !session) {
-            return NextResponse.redirect(new URL('/sign-in', req.nextUrl));
-        }
-
-        if (isPublicRoute && session?.user?.name && !pathname.startsWith('/note')) {
-            return NextResponse.redirect(new URL('/note', req.nextUrl));
-        }
-
-        return NextResponse.next();
-    } catch (error) {
-        console.error('Middleware error:', error);
-        return NextResponse.redirect(new URL('/error', req.nextUrl));
     }
-};
+
+    if (path === '/sign-in') {
+        if (session) {
+            return NextResponse.redirect(new URL('/note', request.url))
+        } else {
+            return NextResponse.next()
+        }
+    }
+
+    if (path === '/note' && !session) {
+        return NextResponse.redirect(new URL('/sign-in', request.url))
+    }
+
+    if (isPublicPath) {
+        return NextResponse.next()
+    }
+
+    if (!session) {
+        return NextResponse.redirect(new URL('/sign-in', request.url))
+    }
+
+    return NextResponse.next()
+}
 
 export const config = {
-    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};
+    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+}

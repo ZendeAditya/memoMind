@@ -1,9 +1,7 @@
-import { Button } from "@/components/ui/button";
 import React from "react";
 import authImg from "../../../../assets/auth.jpg";
 import Image from "next/image";
-import SignIn from "@/components/auth/SignIn";
-
+import SignIn from "@/components/auth/Login";
 
 const SignInPage = () => {
   return (
@@ -20,7 +18,7 @@ const SignInPage = () => {
           <div className="w-auto container mx-auto">
             <div className="border-2 w-[30rem] rounded-lg shadow-lg h-40 border-gray-500 text-center translate-y-10 py-5">
               <h2 className=" text-lg p-2">Welcome to MemoMind!</h2>
-              <Button className="w-80 h-10">Sign In With Google</Button>
+              <SignIn />
             </div>
           </div>
           <div className="">

@@ -6,13 +6,10 @@ export function SignOut() {
     <form
       action={async () => {
         "use server";
-        await signOut({ redirectTo: "/sign-in" });
+        await signOut();
       }}
     >
-      <Button
-        className="py-2 bg-red-500 w-20 rounded-lg shadow-lg p-2 m-2"
-        type="submit"
-      >
+      <Button type="submit" className="w-40 py-2 px-2 m-2">
         Sign Out
       </Button>
     </form>
