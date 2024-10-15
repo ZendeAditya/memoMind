@@ -11,7 +11,6 @@ export async function saveUserData(session: Session | null) {
 
     try {
         await connectdb();
-        console.log("User is : ", User);
 
         const existingUser = await User.findOne({ _id: session.user.id });
 
@@ -29,7 +28,6 @@ export async function saveUserData(session: Session | null) {
         });
 
         revalidatePath('/note');
-        console.log("New User : ", newUser);
         return { success: true, user: newUser.toObject() };
     } catch (error) {
         console.error('Failed to save user data:', error);

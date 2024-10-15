@@ -3,12 +3,15 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Profile from "@/components/auth/Profile";
 import { SignOut } from "../auth/SignOut";
-
+import Sidebar from "./Sidebar";
+import DarkMode from "../landing/DarkMode";
 const Nav = () => {
   return (
-    <nav className="flex items-center justify-between border-b-2 py-2 shadow-md">
+    <nav className="flex items-center justify-between border-b-2 py-2 shadow-md px-2 ">
       <div className="flex items-center justify-between">
+        <Sidebar />
         <h2 className="text-3xl px-2 py-2">MemoMind</h2>
+        <DarkMode />
       </div>
       <div>
         {/* search box  */}
