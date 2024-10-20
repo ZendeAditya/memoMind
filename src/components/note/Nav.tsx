@@ -16,7 +16,10 @@ const Nav = () => {
       <div>
         {/* search box  */}
         <form action="" className="flex items-center justify-between gap-2">
-          <Input className="border-2 w-96 border-gray-600" />
+          <Input
+            className="border-2 w-96 border-gray-600"
+            placeholder="Search Notes...!"
+          />
           <Button type="submit">Search</Button>
         </form>
       </div>
