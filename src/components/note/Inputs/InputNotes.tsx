@@ -1,21 +1,22 @@
 "use client";
 import React, { FormEvent, useState, useCallback } from "react";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from "../../ui/tooltip";
 
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { TbBackground } from "react-icons/tb";
 import { CiImageOn } from "react-icons/ci";
 import { MdArchive } from "react-icons/md";
 import { MdLabel, MdOutlineUndo, MdOutlineRedo } from "react-icons/md";
 import { FaChalkboard } from "react-icons/fa";
+import BackgroundTheme from "../Buttons/BackgroundTheme";
 
 interface IconItem {
   name: string;
@@ -29,6 +30,7 @@ const InputNotes = () => {
   const [textStates, setTextStates] = useState<string[]>([""]);
   const [currentStateIndex, setCurrentStateIndex] = useState<number>(0);
   const [text, setText] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
@@ -62,15 +64,83 @@ const InputNotes = () => {
     [currentStateIndex, textStates]
   );
 
+  const handleButtonClick = (action: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log(`Button clicked: ${action}`);
+    switch (action) {
+      case "background":
+        handleBackgroundClick(e);
+        break;
+      case "image":
+        handleImageClick(e);
+        break;
+      case "archive":
+        handleArchiveClick(e);
+        break;
+      case "label":
+        handleLabelClick(e);
+        break;
+      case "drawing":
+        handleDrawingClick(e);
+        break;
+      default:
+        break;
+    }
+  };
   const iconItems: IconItem[] = [
-    { name: "Background", icon: <TbBackground /> },
-    { name: "Image", icon: <CiImageOn /> },
-    { name: "Archive", icon: <MdArchive /> },
-    { name: "Label", icon: <MdLabel /> },
-    { name: "Drawing", icon: <FaChalkboard /> },
+    {
+      name: "Background",
+      icon: <TbBackground />,
+      onClick: (e) => handleButtonClick("background", e),
+    },
+    {
+      name: "Image",
+      icon: <CiImageOn />,
+      onClick: (e) => handleButtonClick("image", e),
+    },
+    {
+      name: "Archive",
+      icon: <MdArchive />,
+      onClick: (e) => handleButtonClick("archive", e),
+    },
+    {
+      name: "Label",
+      icon: <MdLabel />,
+      onClick: (e) => handleButtonClick("label", e),
+    },
+    {
+      name: "Drawing",
+      icon: <FaChalkboard />,
+      onClick: (e) => handleButtonClick("drawing", e),
+    },
     { name: "Undo", icon: <MdOutlineUndo />, onClick: handleUndo },
     { name: "Redo", icon: <MdOutlineRedo />, onClick: handleRedo },
   ];
+
+  const handleBackgroundClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpen((prev) => !prev);
+  };
+
+  const handleImageClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("Image button clicked");
+  };
+
+  const handleArchiveClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("Archive button clicked");
+  };
+
+  const handleLabelClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("Label button clicked");
+  };
+
+  const handleDrawingClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("Drawing button clicked");
+  };
 
   return (
     <div>
@@ -116,7 +186,7 @@ const InputNotes = () => {
                   cols={30}
                 />
                 <section className="flex items-center justify-between px-2">
-                  <div className="flex gap-2 ">
+                  <div className="flex gap-2 relative">
                     {iconItems.map((item) => (
                       <Button
                         key={item.name}
@@ -131,6 +201,7 @@ const InputNotes = () => {
                         </TooltipProvider>
                       </Button>
                     ))}
+                    <div className="absolute left-19 top-12">{open && <BackgroundTheme />}</div>
                   </div>
                   <div className="flex gap-2">
                     <Button onClick={() => setTitle(false)}>Close</Button>
