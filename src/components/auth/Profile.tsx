@@ -1,14 +1,28 @@
 import { saveUserData } from "@/app/actions/user.actions";
 import { auth } from "@/auth";
 import Image from "next/image";
-import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function UserAvatar() {
   const session = await auth();
   saveUserData(session);
-  const headersList = await headers();
-  const cookie = headersList.get("cookie");
-  console.log("cookie", cookie);
+
+  if (!session?.user) {
+    redirect("/sign-in");
+  }
+
+  if (session?.expires) {
+    const expirationTime = new Date(session.expires).getTime();
+    const currentTime = Date.now();
+    const timeout = expirationTime - currentTime;
+
+    if (timeout > 0) {
+      setTimeout(() => {
+        redirect("/sign-in");
+      }, timeout);
+    }
+  }
+
   if (!session?.user) return null;
   return (
     <div>

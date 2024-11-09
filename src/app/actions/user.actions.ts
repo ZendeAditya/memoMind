@@ -5,6 +5,7 @@ import { Session } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 
 export async function saveUserData(session: Session | null) {
+    // console.log(session);
     if (!session || !session.user) {
         throw new Error('No session provided');
     }

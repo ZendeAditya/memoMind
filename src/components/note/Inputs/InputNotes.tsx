@@ -1,98 +1,72 @@
 "use client";
-import React, { FormEvent, useState, useCallback } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useState,
+} from "react";
 import { Input } from "../../ui/input";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../ui/tooltip";
-
-import { RxCross2 } from "react-icons/rx";
-import { Textarea } from "../../ui/textarea";
-import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
-import { Button } from "../../ui/button";
+  MdArchive,
+  MdLabel,
+  MdOutlineUndo,
+  MdOutlineRedo,
+} from "react-icons/md";
 import { TbBackground } from "react-icons/tb";
 import { CiImageOn } from "react-icons/ci";
-import { MdArchive } from "react-icons/md";
-import { MdLabel, MdOutlineUndo, MdOutlineRedo } from "react-icons/md";
 import { FaChalkboard } from "react-icons/fa";
-import BackgroundTheme from "../Buttons/BackgroundTheme";
-import Image from "next/image";
+import { Button } from "../../ui/button";
+import NoteInput from "./NoteInput";
+import IconButtons from "./IconButtons";
+import ImagePreview from "./ImagePreview";
+import BackgroundSelector from "./BackgroundSelector";
+import {
+  handleTextChange,
+  handleUndo,
+  handleRedo,
+} from "../../../lib/noteHandlers";
 
 let bgcolor: string | undefined = undefined;
 let bgimage: string | undefined = undefined;
-interface IconItem {
+
+type IconItem = {
   name: string;
-  icon?: JSX.Element;
-  onClick?: (e: React.MouseEvent) => void;
-}
+  icon: JSX.Element;
+  onClick: (e: React.MouseEvent) => void;
+};
+
+const handleUndoWrapper = (
+  e: React.MouseEvent<HTMLButtonElement>,
+  currentStateIndex: number,
+  setCurrentStateIndex: Dispatch<SetStateAction<number>>,
+  textStates: string[],
+  setText: Dispatch<SetStateAction<string>>
+) => {
+  handleUndo(e, currentStateIndex, setCurrentStateIndex, textStates, setText);
+};
+
+const handleRedoWrapper = (
+  e: React.MouseEvent<HTMLButtonElement>,
+  currentStateIndex: number,
+  setCurrentStateIndex: Dispatch<SetStateAction<number>>,
+  textStates: string[],
+  setText: Dispatch<SetStateAction<string>>
+) => {
+  handleRedo(e, currentStateIndex, setCurrentStateIndex, textStates, setText);
+};
 
 const InputNotes = () => {
-  const [Title, setTitle] = useState<boolean>(false);
-  const [Pin, setPin] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [desc, setDesc] = useState<string>("");
+  const [pin, setPin] = useState<boolean>(false);
+  const [opneTextBox, setOpenTextBox] = useState<boolean>(false);
   const [textStates, setTextStates] = useState<string[]>([""]);
   const [currentStateIndex, setCurrentStateIndex] = useState<number>(0);
-  const [text, setText] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [backgroundImg, setBackgroundImg] = useState<File | null>(null);
   const [showRemoveButton, setShowRemoveButton] = useState<boolean>(false);
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.preventDefault();
-    const newText = e.target.value;
-    setText(newText);
-
-    const newStates = [...textStates.slice(0, currentStateIndex + 1), newText];
-    setTextStates(newStates);
-    setCurrentStateIndex(newStates.length - 1);
-  };
-
-  const handleUndo = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      if (currentStateIndex > 0) {
-        setCurrentStateIndex(currentStateIndex - 1);
-        setText(textStates[currentStateIndex - 1]);
-      }
-    },
-    [currentStateIndex, textStates]
-  );
-
-  const handleRedo = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      if (currentStateIndex < textStates.length - 1) {
-        setCurrentStateIndex(currentStateIndex + 1);
-        setText(textStates[currentStateIndex + 1]);
-      }
-    },
-    [currentStateIndex, textStates]
-  );
-
-  const handleButtonClick = (action: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    console.log(`Button clicked: ${action}`);
-    switch (action) {
-      case "background":
-        handleBackgroundClick(e);
-        break;
-      case "image":
-        handleImageClick(e);
-        break;
-      case "archive":
-        handleArchiveClick(e);
-        break;
-      case "label":
-        handleLabelClick(e);
-        break;
-      case "drawing":
-        handleDrawingClick(e);
-        break;
-      default:
-        break;
-    }
-  };
   const iconItems: IconItem[] = [
     {
       name: "Background",
@@ -119,9 +93,42 @@ const InputNotes = () => {
       icon: <FaChalkboard />,
       onClick: (e) => handleButtonClick("drawing", e),
     },
-    { name: "Undo", icon: <MdOutlineUndo />, onClick: handleUndo },
-    { name: "Redo", icon: <MdOutlineRedo />, onClick: handleRedo },
+    {
+      name: "Undo",
+      icon: <MdOutlineUndo />,
+      onClick: (e) =>
+        handleUndoWrapper(
+          e,
+          currentStateIndex,
+          setCurrentStateIndex,
+          textStates,
+          setText
+        ),
+    },
+    {
+      name: "Redo",
+      icon: <MdOutlineRedo />,
+      onClick: (e) =>
+        handleRedoWrapper(
+          e,
+          currentStateIndex,
+          setCurrentStateIndex,
+          textStates,
+          setText
+        ),
+    },
   ];
+
+  const handleTextChangeWrapper = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    handleTextChange(
+      e,
+      setText,
+      textStates,
+      setTextStates,
+      currentStateIndex,
+      setCurrentStateIndex
+    );
+  };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -133,6 +140,7 @@ const InputNotes = () => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "image/*";
+    fileInput.name = "file";
     fileInput.onchange = (event) => {
       const files = (event.target as HTMLInputElement).files;
       if (files && files.length > 0) {
@@ -164,46 +172,101 @@ const InputNotes = () => {
     bgcolor = color;
     bgimage = imageUrl;
   };
+
+  const handleSaveNotes = async (e: FormEvent, stagedFile: File | Blob) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    const datas = {
+      title: formData.get("title"),
+      textState: formData.get("desc"),
+      image: null,
+    };
+
+    if (stagedFile) {
+      formData.append("file", stagedFile);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      const data = await res.json();
+      datas.image = data.imgUrl;
+      console.log("api response : ", data);
+      console.log("cloudinary url : ", data.imgUrl);
+    }
+
+    console.log("Data to be saved: local", datas);
+    console.log("data saved!");
+  };
+
+  const handleButtonClick = (action: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    switch (action) {
+      case "background":
+        handleBackgroundClick(e);
+        break;
+      case "Image":
+        handleImageClick(e);
+        break;
+      case "archive":
+        handleArchiveClick(e);
+        break;
+      case "label":
+        handleLabelClick(e);
+        break;
+      case "drawing":
+        handleDrawingClick(e);
+        break;
+      case "undo":
+        handleUndoWrapper(
+          e,
+          currentStateIndex,
+          setCurrentStateIndex,
+          textStates,
+          setText
+        );
+        break;
+      case "redo":
+        handleRedoWrapper(
+          e,
+          currentStateIndex,
+          setCurrentStateIndex,
+          textStates,
+          setText
+        );
+        break;
+      default:
+        console.log(`Unknown action: ${action}`);
+    }
+  };
+
   return (
     <div>
       <div>
-        {!Title && (
+        {!isOpen && (
           <Input
             className="w-[32rem] rounded-lg shadow-md py-5"
             placeholder="Take a note!"
-            onFocus={() => setTitle(true)}
-            onClick={() => setTitle(true)}
+            onFocus={() => setIsOpen(true)}
+            onClick={() => setIsOpen(true)}
           />
         )}
       </div>
-      {Title && (
+      {isOpen && (
         <div>
           <div className="relative">
-            <form>
+            <form onSubmit={(e) => handleSaveNotes(e, backgroundImg!)}>
               <div className="w-[38rem] h-auto rounded-lg border-2 border-gray-500 py-2 px-2 outline-none ">
-                {backgroundImg && (
-                  <Image
-                    // src="https://plus.unsplash.com/premium_vector-1721494020721-45d7295df5e0?q=80&w=1800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    src={
-                      backgroundImg ? URL.createObjectURL(backgroundImg) : ""
-                    }
-                    alt="sample image"
-                    className="w-[38rem] h-[15rem] rounded-lg object-contain"
-                    width={600}
-                    height={200}
-                  />
-                )}
-                {showRemoveButton && (
-                  <button
-                    className="rounded-full absolute  py-2 px-3 w-10  top-0 "
-                    onClick={() => {
-                      setBackgroundImg(null);
-                      setShowRemoveButton(false);
-                    }}
-                  >
-                    <RxCross2 size={27}/>
-                  </button>
-                )}
+                <ImagePreview
+                  backgroundImg={backgroundImg}
+                  setBackgroundImg={setBackgroundImg}
+                  showRemoveButton={showRemoveButton}
+                  setShowRemoveButton={setShowRemoveButton}
+                />
                 <main
                   className={`${
                     bgcolor != undefined
@@ -215,59 +278,31 @@ const InputNotes = () => {
                       bgimage != undefined ? `url(${bgimage})` : undefined,
                   }}
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <Input
-                      placeholder="Title"
-                      className=" my-2 outline-none border-transparent w-full"
-                    />
-                    <button
-                      onClick={(e: FormEvent) => {
-                        e.preventDefault();
-                        setPin((prev) => !prev);
-                      }}
-                    >
-                      {Pin ? (
-                        <MdOutlinePushPin size={30} />
-                      ) : (
-                        <MdPushPin size={30} />
-                      )}
-                    </button>
-                  </div>
-                  <Textarea
-                    value={text}
-                    onChange={handleTextChange}
-                    placeholder="Take a note...!"
-                    className="py-2 my-2 outline-none border-transparent resize-none"
-                    rows={5}
-                    cols={30}
+                  <NoteInput
+                    title={title}
+                    setTitle={setTitle}
+                    desc={desc}
+                    setDesc={setDesc}
+                    pin={pin}
+                    setPin={setPin}
+                    onTextChange={handleTextChangeWrapper}
                   />
                   <section className="flex items-center justify-between px-2">
-                    <div className="flex gap-2 relative">
-                      {iconItems.map((item) => (
-                        <Button
-                          key={item.name}
-                          className="rounded-full"
-                          onClick={item.onClick}
-                        >
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>{item.icon}</TooltipTrigger>
-                              <TooltipContent>{item.name}</TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </Button>
-                      ))}
-                      <div className="absolute left-19 top-12">
-                        {open && (
-                          <BackgroundTheme onSelect={handleBackgroundSelect} />
-                        )}
-                      </div>
-                    </div>
+                    <IconButtons
+                      iconItems={iconItems}
+                      onButtonClick={handleButtonClick}
+                    />
                     <div className="flex gap-2">
-                      <Button onClick={() => setTitle(false)}>Close</Button>
-                      <Button onClick={() => setTitle(false)}>Save</Button>
+                      <Button onClick={() => setOpenTextBox(false)}>
+                        Close
+                      </Button>
+                      <Button type="submit">Save</Button>
                     </div>
                   </section>
+                  <BackgroundSelector
+                    open={open}
+                    handleBackgroundSelect={handleBackgroundSelect}
+                  />
                 </main>
               </div>
             </form>
@@ -278,4 +313,5 @@ const InputNotes = () => {
   );
 };
 
+export { handleUndoWrapper, handleRedoWrapper };
 export default InputNotes;
