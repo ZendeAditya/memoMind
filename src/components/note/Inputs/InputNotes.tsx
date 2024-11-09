@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "../../ui/tooltip";
 
+import { RxCross2 } from "react-icons/rx";
 import { Textarea } from "../../ui/textarea";
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { Button } from "../../ui/button";
@@ -35,6 +36,7 @@ const InputNotes = () => {
   const [text, setText] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [backgroundImg, setBackgroundImg] = useState<File | null>(null);
+  const [showRemoveButton, setShowRemoveButton] = useState<boolean>(false);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
@@ -135,6 +137,7 @@ const InputNotes = () => {
       const files = (event.target as HTMLInputElement).files;
       if (files && files.length > 0) {
         setBackgroundImg(files[0]);
+        setShowRemoveButton(true);
       }
     };
     fileInput.click();
@@ -160,7 +163,6 @@ const InputNotes = () => {
     console.log("Selected image URL:", imageUrl);
     bgcolor = color;
     bgimage = imageUrl;
-    console.log("values : ", bgcolor, bgimage);
   };
   return (
     <div>
@@ -176,7 +178,7 @@ const InputNotes = () => {
       </div>
       {Title && (
         <div>
-          <div className="noteform">
+          <div className="relative">
             <form>
               <div className="w-[38rem] h-auto rounded-lg border-2 border-gray-500 py-2 px-2 outline-none ">
                 {backgroundImg && (
@@ -190,6 +192,17 @@ const InputNotes = () => {
                     width={600}
                     height={200}
                   />
+                )}
+                {showRemoveButton && (
+                  <button
+                    className="rounded-full absolute  py-2 px-3 w-10  top-0 "
+                    onClick={() => {
+                      setBackgroundImg(null);
+                      setShowRemoveButton(false);
+                    }}
+                  >
+                    <RxCross2 size={27}/>
+                  </button>
                 )}
                 <main
                   className={`${

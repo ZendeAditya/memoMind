@@ -27,7 +27,10 @@ export async function saveUserData(session: Session | null) {
             updatedAt: new Date(),
         });
 
-        revalidatePath('/note');
+        setTimeout(() => {
+            revalidatePath('/note');
+        }, 0);
+
         return { success: true, user: newUser.toObject() };
     } catch (error) {
         console.error('Failed to save user data:', error);

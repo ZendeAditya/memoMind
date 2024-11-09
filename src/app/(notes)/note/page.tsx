@@ -1,5 +1,4 @@
 import React from "react";
-import Nav from "@/components/note/Nav";
 import { Metadata } from "next";
 import InputNotes from "@/components/note/Inputs/InputNotes";
 export const metadata: Metadata = {
@@ -10,7 +9,6 @@ export const metadata: Metadata = {
 const NotePage = () => {
   return (
     <section>
-      <Nav />
       <div className="flex items-center justify-center p-4">
         <InputNotes />
       </div>

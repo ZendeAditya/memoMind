@@ -9,9 +9,15 @@ const Nav = () => {
   return (
     <nav className="flex items-center justify-between border-b-2 py-2 shadow-md px-2 ">
       <div className="flex items-center justify-between">
-        <Sidebar />
-        <h2 className="text-3xl px-2 py-2">MemoMind</h2>
-        <DarkMode />
+        <div>
+          <Sidebar />
+        </div>
+        <div>
+          <h2 className="text-3xl px-2 py-2">MemoMind</h2>
+        </div>
+        <div>
+          <DarkMode />
+        </div>
       </div>
       <div>
         {/* search box  */}

@@ -14,13 +14,23 @@ import { IoArchiveSharp } from "react-icons/io5";
 import { ImBin2 } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Separator } from "../ui/separator";
-
+import { Button } from "../ui/button";
+import Link from "next/link";
+interface SidebarItem {
+  title: string;
+  icon: JSX.Element;
+  link: string;
+}
 const Sidebar = () => {
-  const sidebarItems = [
-    { title: "Note", icon: <FaRegNoteSticky size={25} /> },
-    { title: "Labels", icon: <MdOutlineLabel size={25} /> },
-    { title: "Archives", icon: <IoArchiveSharp size={25} /> },
-    { title: "Bin", icon: <ImBin2 size={25} /> },
+  const sidebarItems: SidebarItem[] = [
+    { title: "Note", icon: <FaRegNoteSticky size={25} />, link: "/note" },
+    { title: "Labels", icon: <MdOutlineLabel size={25} />, link: "/labels" },
+    {
+      title: "Archives",
+      icon: <IoArchiveSharp size={25} />,
+      link: "/archives",
+    },
+    { title: "Bin", icon: <ImBin2 size={25} />, link: "/bin" },
   ];
 
   return (
@@ -36,15 +46,19 @@ const Sidebar = () => {
           </SheetTitle>
           <SheetHeader>
             <SheetDescription>
-              <ul>
+              <ul className="flex flex-col gap-2 py-3">
                 {sidebarItems.map((item, index) => (
-                  <li
+                  <Button
                     key={index}
-                    className="flex items-center justify-start gap-2 text-xl p-2 py-2 rounded-full hover:bg-yellow-400 cursor-pointer w-40 my-2"
+                    className="w-full flex items-center justify-start gap-4"
                   >
-                    <p className="">{item.icon}</p>
-                    <p>{item.title}</p>
-                  </li>
+                    <Link href={item.link}>
+                      <li className="flex items-center justify-center gap-3 py-2">
+                        <p className="">{item.icon}</p>
+                        <p>{item.title}</p>
+                      </li>
+                    </Link>
+                  </Button>
                 ))}
               </ul>
             </SheetDescription>
