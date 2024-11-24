@@ -13,11 +13,12 @@ export async function saveUserData(session: Session | null) {
     try {
         await connectdb();
 
-        const existingUser = await User.findOne({ _id: session.user.id });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const existingUser = await User.findOne({ email: session.user.email });
 
-        if (existingUser) {
-            throw new Error('User already exists');
-        }
+        // if (existingUser) {
+        //     throw new Error('User already exists with this email');
+        // }
 
         const newUser = await User.create({
             _id: session.user.id,
@@ -35,6 +36,6 @@ export async function saveUserData(session: Session | null) {
         return { success: true, user: newUser.toObject() };
     } catch (error) {
         console.error('Failed to save user data:', error);
-        return { success: false, error: 'Failed to save user data' };
+
     }
 }

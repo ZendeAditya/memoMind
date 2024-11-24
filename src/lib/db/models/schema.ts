@@ -9,14 +9,16 @@ const userSchema = new Schema({
 const noteSchema = new Schema({
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
-    content: { type: String, required: true },
+    content: { type: String },
     isArchived: { type: Boolean, default: false },
+    file: { type: String },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     createAt: {
         type: Date,
         required: true
     }
 });
+
 
 noteSchema.pre('save', function (next) {
     if (this.title) {

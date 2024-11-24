@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { Input } from "../../ui/input";
+import { saveNotes } from "@/app/actions/notes.action";
 import {
   MdArchive,
   MdLabel,
@@ -102,7 +103,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setText
+          setDesc
         ),
     },
     {
@@ -114,7 +115,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setText
+          setDesc
         ),
     },
   ];
@@ -122,7 +123,7 @@ const InputNotes = () => {
   const handleTextChangeWrapper = (e: ChangeEvent<HTMLTextAreaElement>) => {
     handleTextChange(
       e,
-      setText,
+      setDesc,
       textStates,
       setTextStates,
       currentStateIndex,
@@ -178,11 +179,10 @@ const InputNotes = () => {
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
     const datas = {
-      title: formData.get("title"),
-      textState: formData.get("desc"),
+      title: String(formData.get("title")),
+      textState: String(formData.get("desc")),
       image: null,
     };
-
     if (stagedFile) {
       formData.append("file", stagedFile);
       const res = await fetch("/api/upload", {
@@ -195,12 +195,19 @@ const InputNotes = () => {
 
       const data = await res.json();
       datas.image = data.imgUrl;
-      console.log("api response : ", data);
-      console.log("cloudinary url : ", data.imgUrl);
-    }
+      //To save data into db;
 
-    console.log("Data to be saved: local", datas);
-    console.log("data saved!");
+      const response = await fetch("api/notes", {
+        method: "POST",
+        body: JSON.stringify(datas),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      const note = await response.json();
+      console.log("note : ", note);
+    }
   };
 
   const handleButtonClick = (action: string, e: React.MouseEvent) => {
@@ -227,7 +234,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setText
+          setDesc
         );
         break;
       case "redo":
@@ -236,7 +243,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setText
+          setDesc
         );
         break;
       default:
@@ -247,16 +254,16 @@ const InputNotes = () => {
   return (
     <div>
       <div>
-        {!isOpen && (
+        {!opneTextBox && (
           <Input
             className="w-[32rem] rounded-lg shadow-md py-5"
             placeholder="Take a note!"
-            onFocus={() => setIsOpen(true)}
-            onClick={() => setIsOpen(true)}
+            onFocus={() => setOpenTextBox(true)}
+            onClick={() => setOpenTextBox(true)}
           />
         )}
       </div>
-      {isOpen && (
+      {opneTextBox && (
         <div>
           <div className="relative">
             <form onSubmit={(e) => handleSaveNotes(e, backgroundImg!)}>

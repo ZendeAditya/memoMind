@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
             console.error("No file found in formData:", formData);
             return NextResponse.json({ message: "No file uploaded" });
         }
-        console.log("formData : ", file);
+        // console.log("formData : ", file);
         const fileBuffer = await file.arrayBuffer();
 
         const mimeType = file.type;
