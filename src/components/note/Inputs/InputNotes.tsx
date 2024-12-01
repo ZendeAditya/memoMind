@@ -61,13 +61,14 @@ const InputNotes = () => {
   const [title, setTitle] = useState<string>("");
   const [desc, setDesc] = useState<string>("");
   const [pin, setPin] = useState<boolean>(false);
+  const [archived, setArchived] = useState<boolean>(false);
   const [opneTextBox, setOpenTextBox] = useState<boolean>(false);
   const [textStates, setTextStates] = useState<string[]>([""]);
   const [currentStateIndex, setCurrentStateIndex] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
   const [backgroundImg, setBackgroundImg] = useState<File | null>(null);
   const [showRemoveButton, setShowRemoveButton] = useState<boolean>(false);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const iconItems: IconItem[] = [
     {
       name: "Background",
@@ -154,6 +155,13 @@ const InputNotes = () => {
 
   const handleArchiveClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    const confirmArchive = window.confirm(
+      "Are you sure you want to archive this note?"
+    );
+    if (confirmArchive) {
+      setArchived(true);
+      console.log("Archive button clicked");
+    }
     console.log("Archive button clicked");
   };
 
@@ -174,28 +182,48 @@ const InputNotes = () => {
     bgimage = imageUrl;
   };
 
-  const handleSaveNotes = async (e: FormEvent, stagedFile: File | Blob) => {
+  const handleSaveNotes = async (
+    e: FormEvent,
+    stagedFile: File | Blob | null
+  ) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
+    console.log("Save notes function called");
     const datas = {
       title: String(formData.get("title")),
       textState: String(formData.get("desc")),
       image: null,
+      isArchived: archived,
+      pin: pin,
     };
+    const titleValue = title.trim();
+    const descValue = desc.trim();
+
+    if (!titleValue || !descValue) {
+      alert("Title and description cannot be empty.");
+      setLoading(false);
+      return;
+    }
+
     if (stagedFile) {
       formData.append("file", stagedFile);
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      });
+    }
 
-      const data = await res.json();
-      datas.image = data.imgUrl;
-      //To save data into db;
+    try {
+      if (stagedFile) {
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        const data = await res.json();
+        datas.image = data.imgUrl;
+      }
 
       const response = await fetch("api/notes", {
         method: "POST",
@@ -207,7 +235,16 @@ const InputNotes = () => {
       });
       const note = await response.json();
       console.log("note : ", note);
+      if (response.ok) {
+        setTitle("");
+        setDesc("");
+        setBackgroundImg(null);
+        setShowRemoveButton(false);
+      }
+    } catch (error) {
+      console.error("Error saving note:", error);
     }
+    setLoading(false);
   };
 
   const handleButtonClick = (action: string, e: React.MouseEvent) => {
@@ -303,7 +340,9 @@ const InputNotes = () => {
                       <Button onClick={() => setOpenTextBox(false)}>
                         Close
                       </Button>
-                      <Button type="submit">Save</Button>
+                      <Button type="submit" disabled={loading}>
+                        {loading ? <Spinner /> : "Save"}
+                      </Button>
                     </div>
                   </section>
                   <BackgroundSelector
@@ -319,6 +358,6 @@ const InputNotes = () => {
     </div>
   );
 };
-
+const Spinner = () => <div className="loader">Saving...</div>;
 export { handleUndoWrapper, handleRedoWrapper };
 export default InputNotes;

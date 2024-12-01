@@ -11,6 +11,7 @@ const noteSchema = new Schema({
     slug: { type: String, required: true, unique: true },
     content: { type: String },
     isArchived: { type: Boolean, default: false },
+    isPin: { type: Boolean, default: false },
     file: { type: String },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     createAt: {
