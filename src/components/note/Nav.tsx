@@ -7,7 +7,7 @@ import Sidebar from "./Sidebar";
 import DarkMode from "../landing/DarkMode";
 const Nav = () => {
   return (
-    <nav className="flex items-center justify-between border-b-2 py-2 shadow-md px-2 ">
+    <nav className="flex items-center justify-between border-b-2 py-2 shadow-md px-2 sticky top-0">
       <div className="flex items-center justify-between">
         <div>
           <Sidebar />

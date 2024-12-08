@@ -120,7 +120,6 @@ const InputNotes = () => {
         ),
     },
   ];
-
   const handleTextChangeWrapper = (e: ChangeEvent<HTMLTextAreaElement>) => {
     handleTextChange(
       e,

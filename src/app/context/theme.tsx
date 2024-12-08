@@ -18,7 +18,9 @@ const ThemeContext = ({ children }: Props) => {
   const [mode, setMode] = useState<string>("dark");
   useEffect(() => {
     document.body.className =
-      mode === "dark" ? "bg-gray-900 text-white duration-300 ease-in animate" : "bg-white text-gray-900 duration-300 ease-in animate";
+      mode === "dark"
+        ? "bg-gray-900 text-white duration-300 ease-in animate"
+        : "bg-white text-gray-900 duration-300 ease-in animate";
   }, [mode]);
   const toggleMode = () => {
     setMode((prevMode) => (prevMode === "dark" ? "light" : "dark"));

@@ -2,21 +2,32 @@ import { connectdb } from "@/lib/db/connect";
 import { Note, User } from "@/lib/db/models/schema";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
+
+const getSessionUser = async () => {
+    try {
+        const session = await auth();
+        if (!session || !session.user) {
+            throw new Error("Unauthorized: No valid session found");
+        }
+        return session.user;
+    } catch (error) {
+        console.error("Error in getSessionUser:", error);
+        throw new Error("Failed to authenticate user");
+    }
+};
+
 export const POST = async (req: NextRequest) => {
     try {
         const body = await req.json();
         await connectdb();
-        const session = await auth();
-        if (!session || !session.user) return null;
-        console.log(session.user.email);
-        console.log("server log : ", body);
+        const user = await getSessionUser();
+
         const title = body.title;
         const desc = body.textState;
         const file = body.image;
         const archived = body.isArchived;
         const pin = body.pin;
-        console.log("file : ", body.image);
-        const userId = await User.findOne({ email: session.user.email });
+        const userId = await User.findOne({ email: user.email });
 
         if (!userId) {
             console.error("User not found!");
@@ -31,13 +42,11 @@ export const POST = async (req: NextRequest) => {
             user: userId,
             createAt: Date.now(),
         });
-
-        console.log("NewNote : -->", newNote);
-
+        console.log("newNote : ", newNote);
         return NextResponse.json({ message: "Note saved successfully!" }, { status: 200 });
 
     } catch (error) {
         console.error("Something went wrong! The note is not saved", error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ error: (error as Error).message === "Unauthorized" ? "Unauthorized" : "Internal Server Error" }, { status: (error as Error).message === "Unauthorized" ? 401 : 500 });
     }
-}
+};

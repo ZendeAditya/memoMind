@@ -1,16 +1,37 @@
 "use server";
-interface NoteData {
-    title: string | null;
-    textState: string | null;
-    image: string | null;
-}
+import { auth } from "@/auth";
+import { Note, User } from "@/lib/db/models/schema";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const saveNotes = async (data: NoteData) => {
+const getSessionUser = async () => {
     try {
-        console.log("data from server action : ", data);
-        
+        const session = await auth();
+        if (!session || !session.user) {
+            throw new Error("Unauthorized: No valid session found");
+        }
+        return session.user;
     } catch (error) {
-        console.error("Error saving notes: ", error);
+        console.error("Error in getSessionUser:", error);
+        throw new Error("Failed to authenticate user");
+    }
+};
+
+export const getAllNoteByUser = async () => {
+    const user = await getSessionUser();
+    if (!user) {
+        throw new Error("Unauthorized: No valid session found");
+    }
+    try {
+        const userRecord = await User.findOne({ email: user.email }).exec();
+        if (!userRecord) {
+            throw new Error("User not found");
+        }
+        const notes = await Note.find({ user: userRecord._id });
+        if (!notes.length) {
+            throw new Error("No notes found for this user");
+        }
+        return notes;
+    } catch (error) {
+        console.error("Error fetching user notes:", error);
+        throw new Error("Failed to fetch notes");
     }
 }

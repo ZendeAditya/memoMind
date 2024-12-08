@@ -1,7 +1,7 @@
 import { saveUserData } from "@/app/actions/user.actions";
 import { auth } from "@/auth";
-import Image from "next/image";
 import { redirect } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default async function UserAvatar() {
   const session = await auth();
@@ -24,17 +24,17 @@ export default async function UserAvatar() {
   }
 
   if (!session?.user) return null;
+  const imgUrl = session.user.image!;
   return (
     <div>
       {session.user?.image ? (
         <div className="relative">
-          <Image
-            src={session.user.image}
-            alt="profile-Image"
-            width={50}
-            height={50}
-            className="rounded-full px-2 object-contain"
-          />
+          <Avatar>
+            <AvatarImage src={`${imgUrl}`} />
+            <AvatarFallback className="text-black bg-white  ">
+              {session.user.name?.trim().slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
         </div>
       ) : (
         <h2>Welcome to our app</h2>

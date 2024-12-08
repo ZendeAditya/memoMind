@@ -42,7 +42,7 @@ const NoteInput = ({
             setPin((prev) => !prev);
           }}
         >
-          {pin ? <MdOutlinePushPin size={30} /> : <MdPushPin size={30} />}
+          {pin ? <MdPushPin size={30} /> : <MdOutlinePushPin size={30} />}
         </button>
       </div>
       <Textarea

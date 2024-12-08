@@ -48,17 +48,14 @@ const Sidebar = () => {
             <SheetDescription>
               <ul className="flex flex-col gap-2 py-3">
                 {sidebarItems.map((item, index) => (
-                  <Button
-                    key={index}
-                    className="w-full flex items-center justify-start gap-4"
-                  >
-                    <Link href={item.link}>
+                  <Link href={item.link} key={index}>
+                    <Button className="w-full flex items-center justify-start gap-4">
                       <li className="flex items-center justify-center gap-3 py-2">
                         <p className="">{item.icon}</p>
                         <p>{item.title}</p>
                       </li>
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 ))}
               </ul>
             </SheetDescription>
