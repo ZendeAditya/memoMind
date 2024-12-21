@@ -1,7 +1,6 @@
-import React from "react";
 import { getAllNoteByUser } from "@/app/actions/notes.action";
 import Image from "next/image";
-
+import DeleteNoteButton from "../Buttons/DeleteNoteButton";
 export interface Note {
   _id: string;
   title: string;
@@ -11,6 +10,7 @@ export interface Note {
   isArchived: boolean;
   isPin: boolean;
   user: string;
+  isDeleted: boolean;
   createdAt: Date;
   updatedAt?: Date;
 }
@@ -19,16 +19,16 @@ const DisplayAllNotes = async () => {
   notes.reverse();
   const pinnedNotes = notes.filter((note) => note.isPin);
   const unpinnedNotes = notes.filter((note) => !note.isPin);
-
   return (
     <div className="mx-10 px-10">
-      <h1>Pinned Notes</h1>
+      <h1 className="text-3xl py-2 px-2 rounded-lg">Pinned Notes</h1>
       {pinnedNotes.length > 0 ? (
         pinnedNotes.map((note) => (
           <div
             key={note._id}
-            className="w-[30rem]  p-3  h-auto m-2 rounded-lg border-2 border-gray-500"
+            className="w-[30rem] p-3 h-auto m-2 rounded-lg border-2 border-gray-500 group relative"
           >
+            <DeleteNoteButton id={note._id.toString()} />
             <h2>{note.title}</h2>
             <div>{note.content}</div>
             {note.file && (
@@ -42,19 +42,21 @@ const DisplayAllNotes = async () => {
             <div>Is Pinned: {note.isPin ? "Yes" : "No"}</div>
             <div>{note.user.toString()}</div>
             <div>{note.slug}</div>
+            <div>{note.isDeleted}</div>
           </div>
         ))
       ) : (
         <p>No pinned notes available.</p>
       )}
 
-      <h1>All Notes</h1>
+      <h1 className="text-3xl py-2 px-2 rounded-lg">All Notes</h1>
       {unpinnedNotes.length > 0 ? (
         unpinnedNotes.map((note) => (
           <div
             key={note._id}
-            className="w-full p-3 h-72 m-2 rounded-lg border-2 border-gray-500"
+            className="w-full p-3 h-72 m-2 rounded-lg border-2 border-gray-500 relative"
           >
+            <DeleteNoteButton id={note._id.toString()} />
             <h2>{note.title}</h2>
             <p>{note.content}</p>
             {note.file && (

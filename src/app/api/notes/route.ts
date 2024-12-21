@@ -40,6 +40,7 @@ export const POST = async (req: NextRequest) => {
             isPin: pin,
             file: file,
             user: userId,
+            isDeleted: false,
             createAt: Date.now(),
         });
         console.log("newNote : ", newNote);

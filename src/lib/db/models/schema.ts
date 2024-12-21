@@ -14,6 +14,7 @@ const noteSchema = new Schema({
     isPin: { type: Boolean, default: false },
     file: { type: String },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
+    isDeleted: { type: Boolean, default: false },
     createAt: {
         type: Date,
         required: true

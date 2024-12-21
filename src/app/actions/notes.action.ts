@@ -22,13 +22,24 @@ export const getAllNoteByUser = async () => {
         if (!userRecord) {
             throw new Error("User not found");
         }
+        
         const notes = await Note.find({ user: userRecord._id });
-        if (!notes.length) {
-            throw new Error("No notes found for this user");
-        }
-        return notes;
+        return notes.length > 0 ? notes : [];
     } catch (error) {
         console.error("Error fetching user notes:", error);
         throw new Error("Failed to fetch notes");
+    }
+}
+
+export const DeleteNoteById = async (id: string) => {
+    try {
+        const result = await Note.findByIdAndUpdate(id, { isDeleted: true }, { new: true }).exec();
+        if (!result) {
+            throw new Error("Note not found");
+        }
+        return { message: "Note deleted successfully" };
+    } catch (error) {
+        console.error("Error deleting note:", error);
+        throw new Error("Failed to delete note");
     }
 }
