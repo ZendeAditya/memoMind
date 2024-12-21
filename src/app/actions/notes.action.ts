@@ -17,9 +17,6 @@ const getSessionUser = async () => {
 
 export const getAllNoteByUser = async () => {
     const user = await getSessionUser();
-    if (!user) {
-        throw new Error("Unauthorized: No valid session found");
-    }
     try {
         const userRecord = await User.findOne({ email: user.email }).exec();
         if (!userRecord) {

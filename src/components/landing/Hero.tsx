@@ -14,7 +14,7 @@ const Hero = (props: Props) => {
             Capture and Organize Your Thoughts!!
           </h2>
           <p className="text-xl md:text-2xl lg:text-3xl">
-            Stay organized, stress-free, and productive with{" "}
+            Stay organized, stress-free, and productive with
             <span className="font-bold border-b-2 border border-b-yellow-500">
               MemoMind.
             </span>

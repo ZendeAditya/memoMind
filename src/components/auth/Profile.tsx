@@ -1,26 +1,48 @@
+"use client";
+import { useEffect, useState } from "react";
 import { saveUserData } from "@/app/actions/user.actions";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Session } from "next-auth";
 
-export default async function UserAvatar() {
-  const session = await auth();
-  saveUserData(session);
+export default function UserAvatar() {
+  const [session, setSession] = useState<Session>();
+  const [loading, setLoading] = useState(true);
 
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const sessionData = await auth();
+        if (sessionData) {
+          saveUserData(sessionData);
+          setSession(sessionData);
+        } else {
+          redirect("/sign-in");
+        }
 
-  if (session?.expires) {
-    const expirationTime = new Date(session.expires).getTime();
-    const currentTime = Date.now();
-    const timeout = expirationTime - currentTime;
+        if (sessionData?.expires) {
+          const expirationTime = new Date(sessionData.expires).getTime();
+          const currentTime = Date.now();
+          const timeout = expirationTime - currentTime;
 
-    if (timeout > 0) {
-      setTimeout(() => {
-        redirect("/sign-in");
-      }, timeout);
-    }
+          if (timeout > 0) {
+            setTimeout(() => {
+              redirect("/sign-in");
+            }, timeout);
+          }
+        }
+      } catch (error) {
+        console.log("Error fetching user session:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSession();
+  }, []);
+
+  if (loading) {
+    return <h2>Loading...</h2>;
   }
 
   if (!session?.user) return null;

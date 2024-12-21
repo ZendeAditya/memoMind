@@ -16,7 +16,7 @@ export interface Note {
 }
 const DisplayAllNotes = async () => {
   const notes: Note[] = await getAllNoteByUser();
-
+  notes.reverse();
   const pinnedNotes = notes.filter((note) => note.isPin);
   const unpinnedNotes = notes.filter((note) => !note.isPin);
 
