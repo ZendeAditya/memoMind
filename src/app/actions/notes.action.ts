@@ -22,12 +22,11 @@ export const getAllNoteByUser = async () => {
         if (!userRecord) {
             throw new Error("User not found");
         }
-        
+
         const notes = await Note.find({ user: userRecord._id });
         return notes.length > 0 ? notes : [];
     } catch (error) {
         console.error("Error fetching user notes:", error);
-        throw new Error("Failed to fetch notes");
     }
 }
 

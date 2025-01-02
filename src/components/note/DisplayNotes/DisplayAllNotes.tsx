@@ -1,6 +1,8 @@
 import { getAllNoteByUser } from "@/app/actions/notes.action";
 import Image from "next/image";
 import DeleteNoteButton from "../Buttons/DeleteNoteButton";
+import UpdateNoteButton from "../Buttons/UpdateNoteButton";
+
 export interface Note {
   _id: string;
   title: string;
@@ -15,9 +17,12 @@ export interface Note {
   updatedAt?: Date;
 }
 const DisplayAllNotes = async () => {
-  const notes: Note[] = await getAllNoteByUser();
-  notes.reverse();
-  const pinnedNotes = notes.filter((note) => note.isPin);
+  const fetchedNotes = await getAllNoteByUser();
+  const notes: Note[] = fetchedNotes || [];
+  if (notes.length > 0) {
+    notes.reverse();
+  }
+  const pinnedNotes = notes.filter((note) => note.isPin && !note.isDeleted);
   const unpinnedNotes = notes.filter((note) => !note.isPin);
   return (
     <div className="mx-10 px-10">
@@ -29,6 +34,7 @@ const DisplayAllNotes = async () => {
             className="w-[30rem] p-3 h-auto m-2 rounded-lg border-2 border-gray-500 group relative"
           >
             <DeleteNoteButton id={note._id.toString()} />
+            <UpdateNoteButton id={note._id.toString()} />
             <h2>{note.title}</h2>
             <div>{note.content}</div>
             {note.file && (
