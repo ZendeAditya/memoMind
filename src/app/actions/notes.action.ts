@@ -42,3 +42,41 @@ export const DeleteNoteById = async (id: string) => {
         throw new Error("Failed to delete note");
     }
 }
+
+export const getNoteById = async (_id: string) => {
+    try {
+        const note = await Note.findOne({ _id: _id }).exec();
+        if (!note) {
+            throw new Error("Note not found");
+        }
+        return note;
+
+    } catch (error) {
+        console.error(error);
+        throw new Error("Failed to Fetch note");
+    }
+}
+
+export const updateNote = async (id: string, updatedNote: { title: string; content: string; pin: boolean; archived: boolean }) => {
+    try {
+        const note = await Note.findByIdAndUpdate(
+            id,
+            {
+                title: updatedNote.title,
+                content: updatedNote.content,
+                pin: updatedNote.pin,
+                archived: updatedNote.archived,
+            },
+            { new: true }
+        );
+
+        if (!note) {
+            throw new Error("Note not found");
+        }
+
+        return note;
+    } catch (error) {
+        console.error("Failed to update note:", error);
+        throw error;
+    }
+};
