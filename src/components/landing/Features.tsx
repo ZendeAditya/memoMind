@@ -85,9 +85,7 @@ const FeatureSection = () => {
               transition={{ duration: 0.9 }}
             >
               <h2 className="text-3xl font-bold mb-4">{item.title}</h2>
-              <p className="text-lg text-justify ">
-                {item.description}
-              </p>
+              <p className="text-lg text-justify ">{item.description}</p>
             </motion.div>
 
             {/* Image Section */}

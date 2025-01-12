@@ -42,7 +42,7 @@ const handleUndoWrapper = (
   currentStateIndex: number,
   setCurrentStateIndex: Dispatch<SetStateAction<number>>,
   textStates: string[],
-  setText: Dispatch<SetStateAction<string>>
+  setText: Dispatch<SetStateAction<string>>,
 ) => {
   handleUndo(e, currentStateIndex, setCurrentStateIndex, textStates, setText);
 };
@@ -52,7 +52,7 @@ const handleRedoWrapper = (
   currentStateIndex: number,
   setCurrentStateIndex: Dispatch<SetStateAction<number>>,
   textStates: string[],
-  setText: Dispatch<SetStateAction<string>>
+  setText: Dispatch<SetStateAction<string>>,
 ) => {
   handleRedo(e, currentStateIndex, setCurrentStateIndex, textStates, setText);
 };
@@ -104,7 +104,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setDesc
+          setDesc,
         ),
     },
     {
@@ -116,7 +116,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setDesc
+          setDesc,
         ),
     },
   ];
@@ -127,7 +127,7 @@ const InputNotes = () => {
       textStates,
       setTextStates,
       currentStateIndex,
-      setCurrentStateIndex
+      setCurrentStateIndex,
     );
   };
 
@@ -155,7 +155,7 @@ const InputNotes = () => {
   const handleArchiveClick = (e: React.MouseEvent) => {
     e.preventDefault();
     const confirmArchive = window.confirm(
-      "Are you sure you want to archive this note?"
+      "Are you sure you want to archive this note?",
     );
     if (confirmArchive) {
       setArchived(true);
@@ -183,7 +183,7 @@ const InputNotes = () => {
 
   const handleSaveNotes = async (
     e: FormEvent,
-    stagedFile: File | Blob | null
+    stagedFile: File | Blob | null,
   ) => {
     e.preventDefault();
     setLoading(true);
@@ -270,7 +270,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setDesc
+          setDesc,
         );
         break;
       case "redo":
@@ -279,7 +279,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setDesc
+          setDesc,
         );
         break;
       default:

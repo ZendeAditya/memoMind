@@ -1,4 +1,3 @@
-
 import Nav from "@/components/note/Nav";
 
 export default function RootLayout({

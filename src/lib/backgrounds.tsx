@@ -1,4 +1,3 @@
-
 interface Images {
   id: number;
   url: string;
@@ -36,5 +35,3 @@ export const images: Images[] = [
     url: "https://plus.unsplash.com/premium_vector-1719419318551-d4e6af72c1a7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8em9vbSUyMGJhY2tncm91bmR8ZW58MHwwfDB8fHww",
   },
 ];
-
-

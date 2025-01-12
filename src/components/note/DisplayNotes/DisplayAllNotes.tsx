@@ -21,10 +21,10 @@ const DisplayAllNotes = async () => {
     notes.reverse();
   }
   const pinnedNotes = notes.filter((note) => note.isPin && !note.isDeleted);
-  const unpinnedNotes = notes.filter((note) => !note.isPin);
+  const unpinnedNotes = notes.filter((note) => !note.isPin && !note.isDeleted);
 
   return (
-    <div className="mx-10 px-10">
+    <div className="">
       <h1 className="text-3xl py-2 px-2 rounded-lg">Pinned Notes</h1>
       {pinnedNotes.length > 0 ? (
         pinnedNotes.map((note) => (
@@ -58,13 +58,16 @@ const DisplayAllNotes = async () => {
         <p>No pinned notes available.</p>
       )}
 
-      <h1 className="text-3xl py-2 px-2 rounded-lg">All Notes</h1>
+      <h1 className="text-3xl py-2 px-2 rounded-lg">Unpinned Notes</h1>
       {unpinnedNotes.length > 0 ? (
         unpinnedNotes.map((note) => (
           <div
             key={note._id}
             className="w-full p-3 h-72 m-2 rounded-lg border-2 border-gray-500 relative"
           >
+            <div id="buttons" className="flex gap-2 absolute top-2 right-2">
+              <DeleteButton id={note._id.toString()} />
+            </div>
             <h2>{note.title}</h2>
             <p>{note.content}</p>
             {note.file && (

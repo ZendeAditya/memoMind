@@ -1,10 +1,10 @@
-import React from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import Profile from "@/components/auth/Profile";
-import { SignOut } from "../auth/SignOut";
 import Sidebar from "./Sidebar";
-import DarkMode from "../landing/DarkMode";
+import Search from "./Inputs/Search";
+import Link from "next/link";
+import Image from "next/image";
+import memomindlogo from "../../../assets/memomind_logo.png";
+import Image from "next/image";
 const Nav = () => {
   return (
     <nav className="flex items-center justify-between border-b-2 py-2 shadow-md px-2 sticky top-0">
@@ -13,25 +13,22 @@ const Nav = () => {
           <Sidebar />
         </div>
         <div>
-          <h2 className="text-3xl px-2 py-2">MemoMind</h2>
-        </div>
-        <div>
-          <DarkMode />
+          <Link href="/">
+            <h2 className="text-xl md:text-3xl lg:text-5xl px-2 py-2">
+              <Image
+                src={memomindlogo}
+                alt="Logo"
+                className="w-10 h-10 cursor-pointer"
+              />
+            </h2>
+          </Link>
         </div>
       </div>
       <div>
-        {/* search box  */}
-        <form action="" className="flex items-center justify-between gap-2">
-          <Input
-            className="border-2 w-96 border-gray-600"
-            placeholder="Search Notes...!"
-          />
-          <Button type="submit">Search</Button>
-        </form>
+        <Search />
       </div>
-      <div className="flex items-center justify-between">
+      <div>
         <Profile />
-        <SignOut />
       </div>
     </nav>
   );

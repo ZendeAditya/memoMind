@@ -9,7 +9,9 @@ export default function SignIn() {
         await signIn("google");
       }}
     >
-      <Button type="submit" className="py-2 px-2 w-52 h-10">Signin with Google</Button>
+      <Button type="submit" className="py-2 px-2 w-52 h-10">
+        Signin with Google
+      </Button>
     </form>
   );
 }
