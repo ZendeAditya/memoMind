@@ -4,7 +4,7 @@ import React, { useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { searchNote } from "@/app/actions/notes.action";
 
-import { Note } from "@/components/note/DisplayNotes/DisplayAllNotes";
+// import { Note as DisplayNote } from "@/components/note/DisplayNotes/DisplayAllNotes";
 import DeleteButton from "@/components/note/Buttons/DeleteButton";
 import Image from "next/image";
 

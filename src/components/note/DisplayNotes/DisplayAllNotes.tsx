@@ -30,7 +30,7 @@ const DisplayAllNotes = async () => {
         pinnedNotes.map((note) => (
           <div
             key={note._id}
-            className="w-[30rem] p-3 h-auto m-2 rounded-lg border-2 border-gray-500 group relative group"
+            className="lg:w-[30rem] p-3 h-auto m-2 rounded-lg border-2 border-gray-500 group relative group"
           >
             <div
               id="buttons"
@@ -63,7 +63,7 @@ const DisplayAllNotes = async () => {
         unpinnedNotes.map((note) => (
           <div
             key={note._id}
-            className="w-full p-3 h-72 m-2 rounded-lg border-2 border-gray-500 relative"
+            className="w-auto md:w-full p-3 h-72 m-2 rounded-lg border-2 border-gray-500 relative"
           >
             <div id="buttons" className="flex gap-2 absolute top-2 right-2">
               <DeleteButton id={note._id.toString()} />

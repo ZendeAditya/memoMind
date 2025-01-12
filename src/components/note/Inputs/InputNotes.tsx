@@ -42,7 +42,7 @@ const handleUndoWrapper = (
   currentStateIndex: number,
   setCurrentStateIndex: Dispatch<SetStateAction<number>>,
   textStates: string[],
-  setText: Dispatch<SetStateAction<string>>,
+  setText: Dispatch<SetStateAction<string>>
 ) => {
   handleUndo(e, currentStateIndex, setCurrentStateIndex, textStates, setText);
 };
@@ -52,7 +52,7 @@ const handleRedoWrapper = (
   currentStateIndex: number,
   setCurrentStateIndex: Dispatch<SetStateAction<number>>,
   textStates: string[],
-  setText: Dispatch<SetStateAction<string>>,
+  setText: Dispatch<SetStateAction<string>>
 ) => {
   handleRedo(e, currentStateIndex, setCurrentStateIndex, textStates, setText);
 };
@@ -62,7 +62,7 @@ const InputNotes = () => {
   const [desc, setDesc] = useState<string>("");
   const [pin, setPin] = useState<boolean>(false);
   const [archived, setArchived] = useState<boolean>(false);
-  const [opneTextBox, setOpenTextBox] = useState<boolean>(false);
+  const [openTextBox, setOpenTextBox] = useState<boolean>(false);
   const [textStates, setTextStates] = useState<string[]>([""]);
   const [currentStateIndex, setCurrentStateIndex] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
@@ -104,7 +104,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setDesc,
+          setDesc
         ),
     },
     {
@@ -116,7 +116,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setDesc,
+          setDesc
         ),
     },
   ];
@@ -127,7 +127,7 @@ const InputNotes = () => {
       textStates,
       setTextStates,
       currentStateIndex,
-      setCurrentStateIndex,
+      setCurrentStateIndex
     );
   };
 
@@ -155,7 +155,7 @@ const InputNotes = () => {
   const handleArchiveClick = (e: React.MouseEvent) => {
     e.preventDefault();
     const confirmArchive = window.confirm(
-      "Are you sure you want to archive this note?",
+      "Are you sure you want to archive this note?"
     );
     if (confirmArchive) {
       setArchived(true);
@@ -183,7 +183,7 @@ const InputNotes = () => {
 
   const handleSaveNotes = async (
     e: FormEvent,
-    stagedFile: File | Blob | null,
+    stagedFile: File | Blob | null
   ) => {
     e.preventDefault();
     setLoading(true);
@@ -270,7 +270,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setDesc,
+          setDesc
         );
         break;
       case "redo":
@@ -279,7 +279,7 @@ const InputNotes = () => {
           currentStateIndex,
           setCurrentStateIndex,
           textStates,
-          setDesc,
+          setDesc
         );
         break;
       default:
@@ -288,70 +288,78 @@ const InputNotes = () => {
   };
 
   return (
-    <div>
+    <div className="w-full max-w-[95%] mx-auto sm:max-w-[38rem]">
       <div>
-        {!opneTextBox && (
+        {!openTextBox && (
           <Input
-            className="w-[32rem] rounded-lg shadow-md py-5"
+            className="w-full lg:w-[38rem] rounded-lg shadow-md py-5"
             placeholder="Take a note!"
             onFocus={() => setOpenTextBox(true)}
             onClick={() => setOpenTextBox(true)}
           />
         )}
       </div>
-      {opneTextBox && (
-        <div>
-          <div className="relative">
-            <form onSubmit={(e) => handleSaveNotes(e, backgroundImg!)}>
-              <div className="w-[38rem] h-auto rounded-lg border-2 border-gray-500 py-2 px-2 outline-none ">
-                <ImagePreview
-                  backgroundImg={backgroundImg}
-                  setBackgroundImg={setBackgroundImg}
-                  showRemoveButton={showRemoveButton}
-                  setShowRemoveButton={setShowRemoveButton}
+      {openTextBox && (
+        <div className="w-full">
+          <form
+            onSubmit={(e) => handleSaveNotes(e, backgroundImg!)}
+            className="w-full"
+          >
+            <div className="w-full rounded-lg border-2 border-gray-500 py-2 px-2 outline-none">
+              <ImagePreview
+                backgroundImg={backgroundImg}
+                setBackgroundImg={setBackgroundImg}
+                showRemoveButton={showRemoveButton}
+                setShowRemoveButton={setShowRemoveButton}
+              />
+              <main
+                className={`w-full ${
+                  bgcolor != undefined ? `bg-${bgcolor}-500` : "bg-transparent"
+                }`}
+                style={{
+                  backgroundImage:
+                    bgimage != undefined ? `url(${bgimage})` : undefined,
+                }}
+              >
+                <NoteInput
+                  title={title}
+                  setTitle={setTitle}
+                  desc={desc}
+                  setDesc={setDesc}
+                  pin={pin}
+                  setPin={setPin}
+                  onTextChange={handleTextChangeWrapper}
                 />
-                <main
-                  className={`${
-                    bgcolor != undefined
-                      ? `bg-${bgcolor}-500`
-                      : "bg-transparent"
-                  }`}
-                  style={{
-                    backgroundImage:
-                      bgimage != undefined ? `url(${bgimage})` : undefined,
-                  }}
-                >
-                  <NoteInput
-                    title={title}
-                    setTitle={setTitle}
-                    desc={desc}
-                    setDesc={setDesc}
-                    pin={pin}
-                    setPin={setPin}
-                    onTextChange={handleTextChangeWrapper}
-                  />
-                  <section className="flex items-center justify-between px-2">
+                <section className="flex flex-col sm:flex-row items-center justify-between px-2 gap-4">
+                  <div className="w-full sm:w-auto overflow-x-auto">
                     <IconButtons
                       iconItems={iconItems}
                       onButtonClick={handleButtonClick}
                     />
-                    <div className="flex gap-2">
-                      <Button onClick={() => setOpenTextBox(false)}>
-                        Close
-                      </Button>
-                      <Button type="submit" disabled={loading}>
-                        {loading ? <Spinner /> : "Save"}
-                      </Button>
-                    </div>
-                  </section>
-                  <BackgroundSelector
-                    open={open}
-                    handleBackgroundSelect={handleBackgroundSelect}
-                  />
-                </main>
-              </div>
-            </form>
-          </div>
+                  </div>
+                  <div className="flex gap-2 w-full sm:w-auto justify-end">
+                    <Button
+                      onClick={() => setOpenTextBox(false)}
+                      className="px-3 py-1 text-sm sm:text-base sm:px-4 sm:py-2"
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="px-3 py-1 text-sm sm:text-base sm:px-4 sm:py-2"
+                    >
+                      {loading ? <Spinner /> : "Save"}
+                    </Button>
+                  </div>
+                </section>
+                <BackgroundSelector
+                  open={open}
+                  handleBackgroundSelect={handleBackgroundSelect}
+                />
+              </main>
+            </div>
+          </form>
         </div>
       )}
     </div>

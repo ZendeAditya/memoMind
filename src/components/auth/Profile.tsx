@@ -39,8 +39,8 @@ export default async function UserAvatar() {
   return (
     <div>
       {session.user?.image ? (
-        <div className="relative">
-          <div className="overflow-hidden rounded-full w-auto h-auto hover:opacity-75">
+        <div>
+          <div>
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Image

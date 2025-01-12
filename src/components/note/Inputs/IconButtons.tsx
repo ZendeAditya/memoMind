@@ -20,7 +20,7 @@ interface IconButtonsProps {
 
 const IconButtons = ({ iconItems, onButtonClick }: IconButtonsProps) => {
   return (
-    <div className="flex gap-2 relative">
+    <div className="flex gap-2 relative flex-wrap">
       {iconItems.map((item) => (
         <Button
           key={item.name}
