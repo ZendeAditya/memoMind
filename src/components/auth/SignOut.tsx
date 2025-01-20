@@ -1,6 +1,6 @@
 import { signOut } from "@/auth";
 import { Button } from "../ui/button";
-
+import React from "react";
 export function SignOut() {
   return (
     <form

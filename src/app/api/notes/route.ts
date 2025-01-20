@@ -1,4 +1,4 @@
-import { connectdb } from "@/lib/db/connect";
+import  connectdb  from "@/lib/db/connect";
 import { Note, User } from "@/lib/db/models/schema";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
@@ -61,3 +61,5 @@ export const POST = async (req: NextRequest) => {
     );
   }
 };
+
+export const dynamic = 'force-dynamic'

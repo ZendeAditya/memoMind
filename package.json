@@ -6,9 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "generate": "drizzle-kit generate",
-    "push": "drizzle-kit push"
+    "push": "drizzle-kit push",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.5",
@@ -43,17 +44,23 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@eslint/js": "^9.18.0",
     "@types/node": "^20",
     "@types/nookies": "^1.1.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
     "drizzle-kit": "^0.24.2",
-    "eslint": "^8",
+    "eslint": "^8.57.1",
     "eslint-config-next": "14.2.13",
+    "eslint-plugin-react": "^7.37.4",
     "file-loader": "^6.2.0",
+    "globals": "^15.14.0",
     "postcss": "^8",
     "prettier": "^3.4.2",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
   }
 }

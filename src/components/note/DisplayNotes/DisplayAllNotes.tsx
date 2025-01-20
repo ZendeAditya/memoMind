@@ -1,6 +1,7 @@
 import { getAllNoteByUser } from "@/app/actions/notes.action";
 import Image from "next/image";
 import DeleteButton from "../Buttons/DeleteButton";
+import React from "react";
 export interface Note {
   _id: string;
   title: string;

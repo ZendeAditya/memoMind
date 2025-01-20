@@ -4,7 +4,7 @@ import Search from "./Inputs/Search";
 import Link from "next/link";
 import Image from "next/image";
 import memomindlogo from "../../../assets/memomind_logo.png";
-
+import React from "react";
 const Nav = () => {
   return (
     <nav className="px-2 flex items-center justify-between py-2 w-screen border-b-2">
@@ -22,7 +22,7 @@ const Nav = () => {
           </Link>
         </div>
       </div>
-      <div className="flex-grow">
+      <div className="">
         <Search />
       </div>
       <div>

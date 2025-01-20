@@ -2,6 +2,7 @@ import { saveUserData } from "@/app/actions/user.actions";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,

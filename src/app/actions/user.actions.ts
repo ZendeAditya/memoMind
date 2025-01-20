@@ -1,5 +1,5 @@
 "use server";
-import { connectdb } from "@/lib/db/connect";
+import connectdb from "@/lib/db/connect";
 import { User } from "@/lib/db/models/schema";
 import { Session } from "next-auth";
 import { revalidatePath } from "next/cache";

@@ -1,5 +1,5 @@
 import Nav from "@/components/note/Nav";
-
+import React from "react";
 export default function RootLayout({
   children,
 }: Readonly<{

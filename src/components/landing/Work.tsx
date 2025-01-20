@@ -1,8 +1,6 @@
 import React from "react";
-type Props = object;
-import demo from "../../../assets/demo.mp4";
-import Video from "next-video";
-const Work = (_props: Props) => {
+
+const Work = () => {
   return (
     <div className="w-screen hero min-h-screen">
       <h2 className="text-center text-3xl py-2">Get Started in 3 Easy Steps</h2>

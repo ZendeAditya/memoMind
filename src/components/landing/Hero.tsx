@@ -2,9 +2,7 @@ import React from "react";
 import { Button } from "../ui/button";
 import Nav from "./Nav";
 
-type Props = {};
-
-const Hero = (props: Props) => {
+const Hero = () => {
   return (
     <>
       <Nav />
